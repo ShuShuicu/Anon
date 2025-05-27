@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Anon配置
  */
@@ -11,17 +12,14 @@ class Anon
         $Root = __DIR__ . '/';
         $Server  = __DIR__ . '/Server/';
         $Modules = __DIR__ . '/Modules/';
-        
-        // 先加载配置类
         require_once $Modules . 'Config.php';
-        
-        // 检查是否已安装
-        if (!Anon_Config::isInstalled()) {
-            header('Location: /anon/install');
-            exit;
+        // 如果是安装路由则跳过检查
+        if (strpos($_SERVER['REQUEST_URI'], '/anon/install') === false) {
+            if (!Anon_Config::isInstalled()) {
+                header('Location: /anon/install');
+                exit;
+            }
         }
-        
-        // 已安装则加载其他必要文件
         require_once $Server  . 'Database.php';
         require_once $Modules . 'Check.php';
         require_once $Root . 'Setup.php';
